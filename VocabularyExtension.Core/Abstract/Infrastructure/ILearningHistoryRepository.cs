@@ -9,7 +9,7 @@ namespace VocabularyExtension.Core.Abstract.Infrastructure
     public interface ILearningHistoryRepository
     {
         void GetRepetitions(DateTime from, DateTime to);
-        (int, int) GetRepetitionsGroupedCount(IEnumerable<int> wordIds);
+        (int wordId, int count) GetRepetitionsCountFor(IEnumerable<int> wordIds);
         (int, DateTime) GetStartsOfLearning(IEnumerable<int> wordIds);
     }
 }

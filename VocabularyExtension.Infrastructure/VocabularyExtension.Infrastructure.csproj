@@ -18,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\VocabularyExtension.Core\VocabularyExtension.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="DatabaseFiles\reword_en05sep.backup">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

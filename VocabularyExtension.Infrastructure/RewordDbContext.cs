@@ -1,66 +1,38 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+using VocabularyExtension.Infrastructure.Models;
 
-#nullable disable
-
-namespace VocabularyExtension.Infrastructure.Models
+namespace VocabularyExtension.Infrastructure
 {
-    public partial class reword_en05sepContext : DbContext
+    public partial class RewordDbContext : DbContext
     {
-        public reword_en05sepContext()
+        protected readonly string _connectionString;
+        public RewordDbContext(string connectionString)
         {
+            _connectionString = connectionString;
         }
 
-        public reword_en05sepContext(DbContextOptions<reword_en05sepContext> options)
+        public RewordDbContext(DbContextOptions<RewordDbContext> options)
             : base(options)
         {
         }
 
-        public virtual DbSet<AndroidMetadatum> AndroidMetadata { get; set; }
-        public virtual DbSet<Audio> Audios { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<DailyGoal> DailyGoals { get; set; }
         public virtual DbSet<Log> Logs { get; set; }
-        public virtual DbSet<Picture> Pictures { get; set; }
-        public virtual DbSet<Setting> Settings { get; set; }
         public virtual DbSet<Word> Words { get; set; }
-        public virtual DbSet<WordAudio> WordAudios { get; set; }
         public virtual DbSet<WordCategory> WordCategories { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlite("Data Source=D:\\__Projects\\GitHub\\VocabularyExtension\\VocabularyExtension\\VocabularyExtension.Infrastructure\\DatabaseFiles\\reword_en05sep.db");
+                optionsBuilder.UseSqlite(_connectionString);
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AndroidMetadatum>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToTable("android_metadata");
-
-                entity.Property(e => e.Locale).HasColumnName("locale");
-            });
-
-            modelBuilder.Entity<Audio>(entity =>
-            {
-                entity.ToTable("AUDIO");
-
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.Content).HasColumnName("CONTENT");
-
-                entity.Property(e => e.IsCustom).HasColumnName("IS_CUSTOM");
-
-                entity.Property(e => e.Var).HasColumnName("VAR");
-            });
-
             modelBuilder.Entity<Category>(entity =>
             {
                 entity.ToTable("CATEGORY");
@@ -142,34 +114,6 @@ namespace VocabularyExtension.Infrastructure.Models
                 entity.Property(e => e.Timestamp).HasColumnName("TIMESTAMP");
 
                 entity.Property(e => e.WordId).HasColumnName("WORD_ID");
-            });
-
-            modelBuilder.Entity<Picture>(entity =>
-            {
-                entity.ToTable("PICTURE");
-
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("ID");
-
-                entity.Property(e => e.Content).HasColumnName("CONTENT");
-
-                entity.Property(e => e.IsCustom).HasColumnName("IS_CUSTOM");
-
-                entity.Property(e => e.Source).HasColumnName("SOURCE");
-
-                entity.Property(e => e.SourceId).HasColumnName("SOURCE_ID");
-            });
-
-            modelBuilder.Entity<Setting>(entity =>
-            {
-                entity.HasKey(e => e.Name);
-
-                entity.ToTable("SETTINGS");
-
-                entity.Property(e => e.Name).HasColumnName("NAME");
-
-                entity.Property(e => e.Value).HasColumnName("VALUE");
             });
 
             modelBuilder.Entity<Word>(entity =>
@@ -278,25 +222,6 @@ namespace VocabularyExtension.Infrastructure.Models
                 entity.Property(e => e.Zht).HasColumnName("ZHT");
             });
 
-            modelBuilder.Entity<WordAudio>(entity =>
-            {
-                entity.ToTable("WORD_AUDIO");
-
-                entity.HasIndex(e => e.WordId, "IDX_WORD_AUDIO_WORD_ID");
-
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("ID");
-
-                entity.Property(e => e.AudioId)
-                    .IsRequired()
-                    .HasColumnName("AUDIO_ID");
-
-                entity.Property(e => e.Ord).HasColumnName("ORD");
-
-                entity.Property(e => e.WordId).HasColumnName("WORD_ID");
-            });
-
             modelBuilder.Entity<WordCategory>(entity =>
             {
                 entity.ToTable("WORD_CATEGORY");
@@ -319,5 +244,5 @@ namespace VocabularyExtension.Infrastructure.Models
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-    }
+    } 
 }
