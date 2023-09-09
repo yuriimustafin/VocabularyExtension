@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using VocabularyExtension.Infrastructure.Models;
+using VocabularyExtension.Core.Models;
 
 namespace VocabularyExtension.Infrastructure
 {
@@ -114,6 +114,10 @@ namespace VocabularyExtension.Infrastructure
                 entity.Property(e => e.Timestamp).HasColumnName("TIMESTAMP");
 
                 entity.Property(e => e.WordId).HasColumnName("WORD_ID");
+
+                entity.HasOne(e => e.Word)
+                    .WithMany()
+                    .HasForeignKey(e => e.WordId);
             });
 
             modelBuilder.Entity<Word>(entity =>
@@ -211,7 +215,7 @@ namespace VocabularyExtension.Infrastructure
 
                 entity.Property(e => e.Ukr).HasColumnName("UKR");
 
-                entity.Property(e => e.Word1)
+                entity.Property(e => e.OriginalWord)
                     .IsRequired()
                     .HasColumnName("WORD");
 

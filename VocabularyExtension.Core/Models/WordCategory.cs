@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace VocabularyExtension.Infrastructure.Models
+namespace VocabularyExtension.Core.Models
 {
+    // TODO: Move models to Infra, add mapping
     public partial class WordCategory
     {
         public long Id { get; set; }

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace VocabularyExtension.Infrastructure.Models
+namespace VocabularyExtension.Core.Models
 {
+    // TODO: Move models to Infra, add mapping
     public partial class Word
     {
         public long Id { get; set; }
-        public string Word1 { get; set; }
+        public string OriginalWord { get; set; }
         public string Transcription { get; set; }
         public string Rus { get; set; }
         public string Tur { get; set; }
