@@ -13,7 +13,7 @@ namespace VocabularyExtension.Infrastructure
     {
         // TODO: Refactor hardcode, do a proper DI!
         protected readonly string _connection 
-            = "Data Source=D:\\__Projects\\GitHub\\VocabularyExtension\\VocabularyExtension\\VocabularyExtension.Infrastructure\\DatabaseFiles\\reword_en05sep.db";
+            = "Data Source=D:\\__Projects\\GitHub\\VocabularyExtension\\VocabularyExtension\\VocabularyExtension.Infrastructure\\DatabaseFiles\\reword_en09sep.db";
         public IEnumerable<Log> GetRepetitions(DateTime from, DateTime to)
         {
             using (var context = new RewordDbContext(_connection))

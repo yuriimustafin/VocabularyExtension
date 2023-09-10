@@ -12,7 +12,7 @@ namespace VocabularyExtension.ConsoleApp
         {
             var repo = new RewordLearningHistoryRepository();
             var learningMng = new LearningHistoryManager(repo);
-            var logs = learningMng.GetMostDifficultWords(10);//repo.GetRepetitions(DateTime.Now.AddDays(-5), DateTime.Now);
+            var logs = learningMng.GetMostDifficultWords(30);//repo.GetRepetitions(DateTime.Now.AddDays(-5), DateTime.Now);
 
             Console.WriteLine(JsonSerializer.Serialize(logs));
         }

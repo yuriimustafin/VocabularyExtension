@@ -18,7 +18,6 @@ namespace VocabularyExtension.Core
             _repo = repo;
         }
 
-        // TODO: except words with status Learnt!
         public IEnumerable<string> GetMostDifficultWords(int amount)
         {
             if (amount < 3)
@@ -26,7 +25,8 @@ namespace VocabularyExtension.Core
                 throw new ArgumentOutOfRangeException();
             }
 
-            var weekLogs = _repo.GetRepetitions(DateTime.Now.AddDays(-7), DateTime.Now);
+            var weekLogs = _repo.GetRepetitions(DateTime.Now.AddDays(-7), DateTime.Now)
+                .Where(x => x.Word.Status != (long)RewordStatuses.Mastered);
             var result = new List<Word>();
             var weekWords = weekLogs
                 .Select(x => x.Word)
@@ -35,11 +35,11 @@ namespace VocabularyExtension.Core
             // 1st method
             var mostOftenLastWeek = weekLogs
                     .GroupBy(x => x.WordId)
-                    .OrderByDescending(x => x.Count())
-                    .Take(amount / 3);
+                    .OrderByDescending(x => x.Count());
 
             var mostOftenLastWeekIds = mostOftenLastWeek
-                    .Select(x => x.FirstOrDefault()?.WordId);
+                    .Select(x => x.FirstOrDefault()?.WordId)
+                    .Take(amount / 3);
 
             result.AddRange(
                 weekWords
@@ -49,7 +49,7 @@ namespace VocabularyExtension.Core
                 .Where(x => !mostOftenLastWeekIds.Contains(x.Id));
 
             // 2nd method
-            var totalLogsCount = _repo.GetRepetitionsCountFor(weekLogs.Select(x => x.WordId));
+            var totalLogsCount = _repo.GetRepetitionsCountFor(weekWords.Select(x => x.Id));
             var mostOftenAllTime = totalLogsCount
                     .OrderByDescending(x => x.Value)
                     .Take(amount / 3);
@@ -64,7 +64,7 @@ namespace VocabularyExtension.Core
 
             // TODO: Move out 2nd and 3rd method
             // 3rd method
-            var wordsWithStartDates = _repo.GetStartsOfLearning(weekLogs.Select(x => x.WordId));
+            var wordsWithStartDates = _repo.GetStartsOfLearning(weekWords.Select(x => x.Id));
             var oldestWords = wordsWithStartDates
                     .OrderBy(x => x.Value)
                     .Take(amount - result.Count);
