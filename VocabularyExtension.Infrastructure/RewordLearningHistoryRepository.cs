@@ -47,7 +47,22 @@ namespace VocabularyExtension.Infrastructure
 
         IDictionary<long, DateTime> ILearningHistoryRepository.GetStartsOfLearning(IEnumerable<long> wordIds)
         {
-            throw new NotImplementedException();
+            using (var context = new RewordDbContext(_connection))
+            {
+                var result = context.Logs
+                    .Where(x => wordIds.Contains(x.WordId))
+                    .GroupBy(x => x.WordId)
+                    .Select(gr => new 
+                        { 
+                            WordId = gr.Key, 
+                            OldestTS = gr.Min(l => l.Timestamp)
+                        })
+                    .ToDictionary(
+                        x => x.WordId,
+                        x => DateTimeOffset.FromUnixTimeSeconds(x.OldestTS).DateTime);
+
+                return result;
+            }
         }
     }
 }
