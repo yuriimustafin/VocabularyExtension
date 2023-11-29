@@ -18,6 +18,7 @@ namespace VocabularyExtension.Core
             _repo = repo;
         }
 
+        // TODO: Add to return type some details with explanation why it was added to the list 
         public IEnumerable<string> GetMostDifficultWords(int amount)
         {
             if (amount < 3)
@@ -25,7 +26,7 @@ namespace VocabularyExtension.Core
                 throw new ArgumentOutOfRangeException();
             }
 
-            var weekLogs = _repo.GetRepetitions(DateTime.Now.AddDays(-7), DateTime.Now)
+            var weekLogs = _repo.GetRepetitions(DateTime.Now.AddDays(-15), DateTime.Now)
                 .Where(x => x.Word.Status != (long)RewordStatuses.Mastered);
             var result = new List<Word>();
             var weekWords = weekLogs
